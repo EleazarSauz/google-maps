@@ -1,15 +1,14 @@
 import {useEffect, useRef, useState} from 'react'
 import { useForm } from "react-hook-form";
 
+import TableRoutes from '../components/TableRoutes'
  
 export default function Home() {
     const myMap = useRef(null);
     const [routes, setRoutes] = useState(null)
-    const [origin, setOrigin] = useState('')
-    const [destination, setDestination] = useState('')
-
+    const [showNav, setShowNav] = useState(true)
     const { register, handleSubmit, errors } = useForm();
-    
+
     useEffect(() => {
       var directionsService = new google.maps.DirectionsService();
       var directionsRenderer = new google.maps.DirectionsRenderer();
@@ -26,7 +25,7 @@ export default function Home() {
       var map = new google.maps.Map(myMap.current, mapOptions);
       directionsRenderer.setMap(map);
       
-      if (origin.length > 0  && destination.length > 0) {
+      if (routes) {
         directionsService.route(routes, function(result, status) {
           if (status == 'OK') {
             directionsRenderer.setDirections(result);
@@ -36,6 +35,7 @@ export default function Home() {
     }, [routes])
     
     const onSubmit = data => {
+
       console.log(data)
       setRoutes({
         origin: data.origin,
@@ -46,40 +46,58 @@ export default function Home() {
     
   return (
     <>
-      <div className="row">
-        <nav className="col-md-4 col-lg-3 d-md-block collapse pr-0">
-          <div className="pt-4">
+      <div className="row" style={{ height: '100vh' }} >
+        <main role="main" className={`ml-sm-auto order-md-2 ${showNav? 'col-lg-9 col-md-8':'col-md-12'}`}>
+          <div className="w-100 h-100"ref={myMap}></div>
+        </main>
+
+        {
+          showNav ? 
+        <nav className="col-md-4 col-lg-3 d-md-block pr-0 order-md-1 animate__animated animate__fadeInLeft">
+          <div className="pt-2 ml-2">
             <ul className="nav flex-column">
               <li className="nav-item">
-                <a className="nav-link active" href="#">
-                  <span data-feather="home"></span>
-                  Rutas
-                </a>
+                <h2>
+                  Maps
+                </h2>
               </li>
               <li className="nav-item">
-                <form className="ml-2" onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                       <label>¿De dónde sales?</label>
                       <input type="text" placeholder="Origen" className="form-control" name="origin"
-                        onChange={e => setOrigin(e.target.value)} ref={register({ required: true })} />
+                        ref={register({ required: true })} />
                         {errors.origin && <small className="text-danger">Este campo es requerido</small>}
                     </div>
                     <div className="form-group">
                       <label>¿A dónde te diriges?</label>
                       <input type="text" placeholder="Destino" className="form-control" name="destination"
-                        onChange={e => setDestination(e.target.value)} ref={register({ required: true })} />
+                        ref={register({ required: true })} />
                         {errors.destination && <small className="text-danger">Este campo es requerido</small>}
                     </div>
                     <button type="submit" className="btn btn-primary btn-block">Buscar Ruta</button>
                 </form>
               </li>
+
+              {
+                routes &&
+                <li className="nav-item mt-3">
+                  <TableRoutes routes={routes}/>
+                </li>
+              }
+
+              <li className="nav-item mt-3">
+                <button type="buttom" onClick={()=>setShowNav(!showNav)}  className="btn btn-primary ml-3">
+                  <i className="fas fa-lg fa-chevron-circle-left"></i>
+                </button>
+              </li>
             </ul>
           </div>
         </nav>
-
-        <main role="main" className="col-md-8 ml-sm-auto col-lg-9">
-          <div className="w-100" style={{ height: '100vh' }} ref={myMap}></div>
-        </main>
+        :
+        <button type="buttom" onClick={()=>setShowNav(!showNav)} className="btn btn-primary pl-3" style={{position: 'fixed', bottom: '120px', left: '-2px'}}><i className="fas fa-lg fa-chevron-circle-right"></i>
+        </button>
+        }
       </div>
     </>
   )
