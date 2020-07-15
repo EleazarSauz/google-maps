@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
     <>
         <Head>
             <title>Maps Rutas</title>
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            <meta name="viewport" content="initial-scale=1, width=device-width user-scalable=no" />
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"/>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
