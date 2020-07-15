@@ -1,5 +1,5 @@
 
-const TableRoutes = ({routes, data}) => {
+const TableRoutes = ({routes}) => {
     return (
         <div>
             <div className="d-flex align-items-center p-3 my-3 text-white-50 bg-info rounded shadow-sm">

@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react'
 import { useForm } from "react-hook-form";
+import { useRouter } from 'next/router'
 
 import TableRoutes from '../components/TableRoutes'
  
@@ -10,6 +11,7 @@ export default function Map() {
     const [routesResult, setRoutesResult] = useState(null)
     const [showNav, setShowNav] = useState(true)
     const { register, handleSubmit, errors } = useForm();
+    const router = useRouter()
 
     useEffect(() => {
       var directionsService = new google.maps.DirectionsService();
@@ -56,8 +58,8 @@ export default function Map() {
     }, [routes])
     
     const onSubmit = data => {
-
       console.log(data)
+
       setRoutes({
         origin: data.origin,
         destination: data.destination,
@@ -75,58 +77,65 @@ export default function Map() {
 
         {
           showNav ?
-        <nav className="container col-md-4 col-lg-3 d-md-block p-0 order-md-1 animate__animated animate__fadeInLeft" ref={sidebar}>
-          <div className="pt-2 pb-5 mx-2 container-sidebar">
-            <ul className="nav flex-column">
-              <li className="nav-item d-flex">
-                    <button type="buttom" onClick={()=>setShowNav(!showNav)} className="btn btn-primary">
-                        <i className="fas fa-lg fa-chevron-circle-left"></i>
-                    </button>
-                    <h2 className="ml-3">
-                        Buscar rutas
-                    </h2>
-              </li>
-              <li className="nav-item mt-3">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form-group">
-                      <label>¿De dónde sales?</label>
-                      <input type="text" placeholder="Origen" className="form-control" name="origin"
-                        ref={register({ required: true })} />
-                        {errors.origin && <small className="text-danger">Punto de origen requerido</small>}
-                    </div>
-                    <div className="form-group">
-                      <label>¿A dónde te diriges?</label>
-                      <input type="text" placeholder="Destino" className="form-control" name="destination"
-                        ref={register({ required: true })} />
-                        {errors.destination && <small className="text-danger">Punto de destino requerido</small>}
-                    </div>
-                    <button type="submit" className="btn btn-primary btn-block">Buscar Ruta</button>
-                </form>
-              </li>
+            <nav className="container col-md-4 col-lg-3 d-md-block p-0 order-md-1 animate__animated animate__fadeInLeft" ref={sidebar}>
+            <div className="pt-2 pb-5 mx-2 container-sidebar">
+                <ul className="nav flex-column">
+                    <li className="nav-item my-3">
+                        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={()=>router.push('/')}>
+                            <i className="fas fa-lg fa-home"></i>
+                        </button>
+                    </li>
 
-              {
-                routesResult &&
-                <li className="nav-item mt-3">
-                  <TableRoutes routes={routesResult}/>
-                </li>
-              }
-              {
-                !routesResult && routes &&
-                <li className="nav-item mt-3">
-                  <div className="alert alert-danger">
-                    Rutas no encontradas D:
-                  </div>
-                </li>
-              }
-            </ul>
-          </div>
-        </nav>
-        :
-        <div className="animate__animated animate__fadeInLeft" style={{position: 'fixed', bottom: '120px', left: '-2px'}}>
-            <button type="buttom" onClick={()=>setShowNav(!showNav)} className="btn btn-primary pl-3">
-                <i className={`fas fa-lg fa-chevron-circle-${showNav?'left':'right'}`}></i>
-            </button>
-        </div>
+                    <li className="nav-item d-flex">
+                        <button type="button" onClick={()=>setShowNav(!showNav)} className="btn btn-primary">
+                            <i className="fas fa-lg fa-chevron-circle-left"></i>
+                        </button>
+                        <h2 className="ml-3">
+                            Buscar rutas
+                        </h2>
+                    </li>
+
+                    <li className="nav-item mt-3">
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="form-group">
+                            <label>¿De dónde sales?</label>
+                            <input type="text" placeholder="Origen" className="form-control" name="origin"
+                                ref={register({ required: true })} />
+                                {errors.origin && <small className="text-danger">Punto de origen requerido</small>}
+                            </div>
+                            <div className="form-group">
+                            <label>¿A dónde te diriges?</label>
+                            <input type="text" placeholder="Destino" className="form-control" name="destination"
+                                ref={register({ required: true })} />
+                                {errors.destination && <small className="text-danger">Punto de destino requerido</small>}
+                            </div>
+                            <button type="submit" className="btn btn-primary btn-block">Buscar Ruta</button>
+                        </form>
+                    </li>
+
+                    {
+                        routesResult &&
+                        <li className="nav-item mt-3">
+                        <TableRoutes routes={routesResult}/>
+                        </li>
+                    }
+                    {
+                        !routesResult && routes &&
+                        <li className="nav-item mt-3">
+                        <div className="alert alert-danger">
+                            Rutas no encontradas D:
+                        </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            </nav>
+            :
+            <div className="animate__animated animate__fadeInLeft" style={{position: 'fixed', bottom: '120px', left: '-2px'}}>
+                <button type="buttom" onClick={()=>setShowNav(!showNav)} className="btn btn-primary pl-3">
+                    <i className={`fas fa-lg fa-chevron-circle-${showNav?'left':'right'}`}></i>
+                </button>
+            </div>
         }
       </div>
     </>
