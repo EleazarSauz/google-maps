@@ -17,7 +17,7 @@ export default function Home() {
     
   return (
     <>
-      <div className="form-routes my-5">
+      <div className="form-routes fixed-top bg-white w-100">
         <div className="text-center mb-4">
           <h1 className="h1 mb-3 font-weight-normal">Buscar Rutas</h1>
           <p>
@@ -30,7 +30,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="album py-3 bg-light">
+      <div className="album py-5 bg-light" style={{marginTop: 220}}>
         <div className="container">
           <h2 className="h2 my-4">
             Implemetación de axios con datos de <a href="https://jsonplaceholder.typicode.com/">jsonplaceholder</a>
